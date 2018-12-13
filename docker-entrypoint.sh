@@ -36,6 +36,7 @@ rabbitConfigKeys=(
 	default_user
 	default_vhost
 	hipe_compile
+  total_memory_available_override_value
 )
 fileConfigKeys=(
 	management_ssl_cacertfile
