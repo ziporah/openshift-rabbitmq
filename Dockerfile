@@ -1,16 +1,18 @@
 FROM openshift/base-centos7
 
-MAINTAINER Luis Fernando Gomes <your@luiscoms.com.br>
+MAINTAINER Jo Vanvoorden <jo.vanvoorden@uzleuven.be>
 
 ENV ERLANG_SOLUTIONS_VERSION 1.0-1
-ENV ERLANG_VERSION 20.3.8.15-1
+ENV ERLANG_VERSION 20.3.8.14
 RUN yum update -y && yum clean all
 RUN yum install -y wget && yum clean all
-RUN yum install -y http://packages.erlang-solutions.com/erlang-solutions-${ERLANG_SOLUTIONS_VERSION}.noarch.rpm && yum clean all
-RUN yum install -y esl-erlang-${ERLANG_VERSION} && yum clean all
+RUN yum install -y https://github.com/rabbitmq/erlang-rpm/releases/download/v${ERLANG_VERSION}/erlang-${ERLANG_VERSION}-1.el7.centos.x86_64.rpm && yum clean all
+# http://packages.erlang-solutions.com/erlang-solutions-${ERLANG_SOLUTIONS_VERSION}.noarch.rpm && yum clean all
+# RUN yum install -y erlang-${ERLANG_VERSION} && yum clean all
 
-ENV RABBITMQ_VERSION 3.6.5
-RUN yum install -y http://www.rabbitmq.com/releases/rabbitmq-server/v${RABBITMQ_VERSION}/rabbitmq-server-${RABBITMQ_VERSION}-1.noarch.rpm && yum clean all
+ENV RABBITMQ_VERSION 3.7.9
+RUN yum install -y https://github.com/rabbitmq/rabbitmq-server/releases/download/v${RABBITMQ_VERSION}/rabbitmq-server-${RABBITMQ_VERSION}-1.el7.noarch.rpm && yum clean all
+# RUN yum install -y http://www.rabbitmq.com/releases/rabbitmq-server/v${RABBITMQ_VERSION}/rabbitmq-server-${RABBITMQ_VERSION}-1.noarch.rpm && yum clean all
 RUN echo "[{rabbit,[{loopback_users,[]}]}]." > /etc/rabbitmq/rabbitmq.config
 RUN rm -rf /var/lib/rabbitmq/mnesia
 EXPOSE 4369 5671 5672 25672

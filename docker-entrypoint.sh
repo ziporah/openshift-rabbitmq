@@ -189,7 +189,7 @@ rabbit_env_config() {
 				[ "$val" ] && rawVal='true' || rawVal='false'
 				;;
 
-			cacertfile|certfile|keyfile)
+			cacertfile|certfile|keyfile|total_memory_available_override_value)
 				[ "$val" ] || continue
 				rawVal='"'"$val"'"'
 				;;

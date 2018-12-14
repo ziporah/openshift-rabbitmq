@@ -1,12 +1,12 @@
 # Supported tags and respective `Dockerfile` links
 
--   [`3.6.5`, `3.6`, `3`, `latest` (*Dockerfile*)](http://github.com/luiscoms/openshift-rabbitmq/blob/master/Dockerfile)
--   [`3.6.5-management`, `3.6-management`, `3-management`, `management` (*management/Dockerfile*)](http://github.com/luiscoms/openshift-rabbitmq/blob/master/management/Dockerfile)
+-   [`3.7.9`, `3.7`, `3`, `latest` (*Dockerfile*)](http://github.com/ziporah/openshift-rabbitmq/blob/master/Dockerfile)
+-   [`3.7.9-management`, `3.7-management`, `3-management`, `management` (*management/Dockerfile*)](http://github.com/ziporah/openshift-rabbitmq/blob/master/management/Dockerfile)
 
 
 This image is based on oficial [RabbitMQ image](https://hub.docker.com/_/rabbitmq/), but the base image is `openshift/base-centos7`.
 
-Pull request to this image can be sended to the `luiscoms/openshift-rabbitmq` [GitHub repo](https://github.com/luiscoms/openshift-rabbitmq).
+Pull request to this image can be sended to the `ziporah/openshift-rabbitmq` [GitHub repo](https://github.com/ziporah/openshift-rabbitmq).
 
 # What is RabbitMQ?
 
@@ -23,7 +23,7 @@ RabbitMQ is open source message broker software (sometimes called message-orient
 One of the important things to note about RabbitMQ is that it stores data based on what it calls the "Node Name", which defaults to the hostname. What this means for usage in Docker is that we should specify `-h`/`--hostname` explicitly for each daemon so that we don't get a random hostname and can keep track of our data:
 
 ```console
-$ docker run -d --hostname my-rabbit --name some-rabbit luiscoms/openshift-rabbitmq:3
+$ docker run -d --hostname my-rabbit --name some-rabbit ziporah/openshift-rabbitmq:3
 ```
 
 If you give that a minute, then do `docker logs some-rabbit`, you'll see in the output a block similar to:
@@ -46,13 +46,13 @@ See the [RabbitMQ "Clustering Guide"](https://www.rabbitmq.com/clustering.html#e
 For setting a consistent cookie (especially useful for clustering but also for remote/cross-container administration via `rabbitmqctl`), use `RABBITMQ_ERLANG_COOKIE`:
 
 ```console
-$ docker run -d --hostname my-rabbit --name some-rabbit -e RABBITMQ_ERLANG_COOKIE='secret cookie here' luiscoms/openshift-rabbitmq:3
+$ docker run -d --hostname my-rabbit --name some-rabbit -e RABBITMQ_ERLANG_COOKIE='secret cookie here' ziporah/openshift-rabbitmq:3
 ```
 
 This can then be used from a separate instance to connect:
 
 ```console
-$ docker run -it --rm --link some-rabbit:my-rabbit -e RABBITMQ_ERLANG_COOKIE='secret cookie here' luiscoms/openshift-rabbitmq:3 bash
+$ docker run -it --rm --link some-rabbit:my-rabbit -e RABBITMQ_ERLANG_COOKIE='secret cookie here' ziporah/openshift-rabbitmq:3 bash
 $ rabbitmqctl -n rabbit@my-rabbit list_users
 Listing users ...
 guest   [administrator]
@@ -61,7 +61,7 @@ guest   [administrator]
 Alternatively, one can also use `RABBITMQ_NODENAME` to make repeated `rabbitmqctl` invocations simpler:
 
 ```console
-$ docker run -it --rm --link some-rabbit:my-rabbit -e RABBITMQ_ERLANG_COOKIE='secret cookie here' -e RABBITMQ_NODENAME=rabbit@my-rabbit luiscoms/openshift-rabbitmq:3 bash
+$ docker run -it --rm --link some-rabbit:my-rabbit -e RABBITMQ_ERLANG_COOKIE='secret cookie here' -e RABBITMQ_NODENAME=rabbit@my-rabbit ziporah/openshift-rabbitmq:3 bash
 $ rabbitmqctl list_users
 Listing users ...
 guest   [administrator]
@@ -72,13 +72,13 @@ guest   [administrator]
 There is a second set of tags provided with the [management plugin](https://www.rabbitmq.com/management.html) installed and enabled by default, which is available on the standard management port of 15672, with the default username and password of `guest` / `guest`:
 
 ```console
-$ docker run -d --hostname my-rabbit --name some-rabbit luiscoms/openshift-rabbitmq:3-management
+$ docker run -d --hostname my-rabbit --name some-rabbit ziporah/openshift-rabbitmq:3-management
 ```
 
 You can access it by visiting `http://container-ip:15672` in a browser or, if you need access outside the host, on port 8080:
 
 ```console
-$ docker run -d --hostname my-rabbit --name some-rabbit -p 8080:15672 luiscoms/openshift-rabbitmq:3-management
+$ docker run -d --hostname my-rabbit --name some-rabbit -p 8080:15672 ziporah/openshift-rabbitmq:3-management
 ```
 
 You can then go to `http://localhost:8080` or `http://host-ip:8080` in a browser.
@@ -88,7 +88,7 @@ You can then go to `http://localhost:8080` or `http://host-ip:8080` in a browser
 If you wish to change the default username and password of `guest` / `guest`, you can do so with the `RABBITMQ_DEFAULT_USER` and `RABBITMQ_DEFAULT_PASS` environmental variables:
 
 ```console
-$ docker run -d --hostname my-rabbit --name some-rabbit -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password luiscoms/openshift-rabbitmq:3-management
+$ docker run -d --hostname my-rabbit --name some-rabbit -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password ziporah/openshift-rabbitmq:3-management
 ```
 
 You can then go to `http://localhost:8080` or `http://host-ip:8080` in a browser and use `user`/`password` to gain access to the management console
@@ -98,7 +98,7 @@ You can then go to `http://localhost:8080` or `http://host-ip:8080` in a browser
 If you wish to change the default vhost, you can do so with the `RABBITMQ_DEFAULT_VHOST` environmental variables:
 
 ```console
-$ docker run -d --hostname my-rabbit --name some-rabbit -e RABBITMQ_DEFAULT_VHOST=my_vhost luiscoms/openshift-rabbitmq:3-management
+$ docker run -d --hostname my-rabbit --name some-rabbit -e RABBITMQ_DEFAULT_VHOST=my_vhost ziporah/openshift-rabbitmq:3-management
 ```
 
 ## Enabling HiPE
@@ -114,7 +114,7 @@ It is therefore important to take that startup delay into consideration when con
 ## Use it on Openshift
 
 ```console
-$ oc new-app luiscoms/openshift-rabbitmq:management
+$ oc new-app ziporah/openshift-rabbitmq:management
 ```
 
 ## Connecting to the daemon
@@ -139,15 +139,15 @@ Please see [the Docker installation documentation](https://docs.docker.com/insta
 
 ## Documentation
 
-Documentation for this image is stored in the [`luiscoms/openshift-rabbitmq` GitHub project](https://github.com/luiscoms/openshift-rabbitmq).
-You cen read the [repository's `README.md` file](https://github.com/luiscoms/openshift-rabbitmq/blob/master/README.md) before attempting a pull request.
+Documentation for this image is stored in the [`ziporah/openshift-rabbitmq` GitHub project](https://github.com/ziporah/openshift-rabbitmq).
+You cen read the [repository's `README.md` file](https://github.com/ziporah/openshift-rabbitmq/blob/master/README.md) before attempting a pull request.
 
 ## Issues
 
-If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/luiscoms/openshift-rabbitmq/issues).
+If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/ziporah/openshift-rabbitmq/issues).
 
 ## Contributing
 
 You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
 
-Before you start to code, we recommend discussing your plans through a [GitHub issue](https://github.com/luiscoms/openshift-rabbitmq/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
+Before you start to code, we recommend discussing your plans through a [GitHub issue](https://github.com/ziporah/openshift-rabbitmq/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
